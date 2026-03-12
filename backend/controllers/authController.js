@@ -127,6 +127,12 @@ export const signin = async (req, res) => {
 };
 
 
+export const signout = async (req, res)=>{
+  res.clearCookie("token");
+res.status(200).json({success: true, message: "Logged out"});
+}
+
+
 export const getMe = async (req, res, next) =>{
     try {
         const user = req.user;
