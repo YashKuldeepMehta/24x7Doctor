@@ -1,11 +1,11 @@
-const HealthRecord = require("../models/HealthRecord");
-const Prescription = require("../models/Prescription");
-const Doctor = require("../models/Doctor");
+import HealthRecord from "../models/HealthRecord.js";
+import Prescription from "../models/Prescription.js";
+import Doctor from "../models/Doctor.js";
 
 
 // Get all health records of a patient
 
-exports.getPatientRecords = async (req, res) => {
+export const getPatientRecords = async (req, res) => {
 
   try {
 
@@ -36,7 +36,7 @@ exports.getPatientRecords = async (req, res) => {
 
 // Get single health record
 
-exports.getRecordDetails = async (req, res) => {
+export const getRecordDetails = async (req, res) => {
 
   try {
 
@@ -61,7 +61,7 @@ exports.getRecordDetails = async (req, res) => {
 
 // Create health record
 
-exports.createHealthRecord = async (req, res) => {
+export const createHealthRecord = async (req, res) => {
 
   try {
 

@@ -1,26 +1,34 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
+import express from "express"
+import dotenv from "dotenv";
+dotenv.config();
+import cors from "cors";
+import { setServers } from "node:dns/promises";
+import connectDB from "./configs/db.js";
+import cookieParser from "cookie-parser";
+import authRouter from "./routes/auth.route.js"
+import healthRecordRoutes from "./routes/healthRecordRoutes.js";
 
-const healthRecordRoutes = require("./routes/healthRecordRoutes");
+setServers(["1.1.1.1", "8.8.8.8"]);
 
 const app = express();
 
+// Middleware
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
-mongoose.connect("mongodb://127.0.0.1:27017/telehealth")
-.then(() => console.log("MongoDB Connected"))
-.catch(err => console.log(err));
+// Test Route
+app.get("/", (req, res) => {
+  res.send("API Running...");
+});
+
+app.use('/api/auth', authRouter)
 
 app.use("/api/healthRecords", healthRecordRoutes);
 
-app.get("/", (req, res) => {
-  res.send("API Running");
-});
+// MongoDB connection
+await connectDB();
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

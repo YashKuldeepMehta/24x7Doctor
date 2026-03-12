@@ -1,14 +1,14 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const healthRecordSchema = new mongoose.Schema({
   patientId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Patient"
+    ref: "User"
   },
 
   doctorId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Doctor"
+    ref: "User"
   },
 
   appointmentId: {
@@ -33,4 +33,4 @@ const healthRecordSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-module.exports = mongoose.model("HealthRecord", healthRecordSchema);
+export default mongoose.model("HealthRecord", healthRecordSchema);

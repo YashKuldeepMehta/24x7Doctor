@@ -1,7 +1,6 @@
-const express = require("express");
+import express from "express";
+import * as controller from "../controllers/healthRecordController.js";
 const router = express.Router();
-
-const controller = require("../controllers/healthRecordController");
 
 
 // Get all records for a patient
@@ -19,4 +18,4 @@ router.get("/record/:recordId", controller.getRecordDetails);
 router.post("/create", controller.createHealthRecord);
 
 
-module.exports = router;
+export default router;
