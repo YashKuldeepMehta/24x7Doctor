@@ -6,30 +6,41 @@ import Doctor from "../models/Doctor.js";
 // Get all health records of a patient
 
 export const getPatientRecords = async (req, res) => {
-
   try {
-
     const { patientId } = req.params;
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+
+    const skip = (page - 1) * limit;
 
     const records = await HealthRecord
       .find({ patientId })
-      .populate("doctorId","name specialization")
+      .populate("doctorId", "name specialization")
       .populate("prescriptionId")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
 
-    res.json(records);
+    const total = await HealthRecord.countDocuments({ patientId });
 
-  }catch (error) {
+    res.json({
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+      records
+    });
 
-  console.log(error);
+  } catch (error) {
 
-  res.status(500).json({
-    message: "Error creating record",
-    error: error.message
-  });
+    console.log(error);
 
-}
+    res.status(500).json({
+      message: "Error fetching records"
+    });
 
+  }
 };
 
 
@@ -80,4 +91,34 @@ export const createHealthRecord = async (req, res) => {
 
   }
 
+};
+
+
+
+export const syncRecords = async (req, res) => {
+  try {
+
+    const { patientId } = req.params;
+    const { lastSync } = req.query;
+
+    const records = await HealthRecord
+      .find({
+        patientId,
+        updatedAt: { $gt: new Date(lastSync) }
+      })
+      .populate("doctorId", "name specialization")
+      .populate("prescriptionId")
+      .sort({ createdAt: -1 });
+
+    res.json(records);
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      message: "Error syncing records"
+    });
+
+  }
 };

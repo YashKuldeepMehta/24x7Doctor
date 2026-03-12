@@ -17,5 +17,8 @@ router.get("/record/:recordId", controller.getRecordDetails);
 
 router.post("/create", controller.createHealthRecord);
 
+// Sync records for low connectivity
+router.get("/sync/:patientId", controller.syncRecords);
+
 
 export default router;
