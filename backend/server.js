@@ -7,6 +7,7 @@ import connectDB from "./configs/db.js";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth.route.js"
 import healthRecordRoutes from "./routes/healthRecordRoutes.js";
+import medicineRoutes from "./routes/medicine.route.js"
 
 setServers(["1.1.1.1", "8.8.8.8"]);
 
@@ -23,8 +24,9 @@ app.get("/", (req, res) => {
 });
 
 app.use('/api/auth', authRouter)
-
 app.use("/api/healthRecords", healthRecordRoutes);
+app.use("/api/medicine", medicineRoutes);
+
 
 // MongoDB connection
 await connectDB();
